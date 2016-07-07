@@ -107,6 +107,11 @@ void term_writestr(const char* data) {
 		term_putchar(data[i]);
 }
 
+void term_nl() {
+	++term_row;
+	term_column = 0;
+}
+
 // Use C linkage for kernel_main
 #if defined(__cplusplus)
 extern "C"
@@ -118,5 +123,7 @@ void kernel_main() {
 	term_init();
 	
 	// Print a string to the terminal
-	term_writestr("Hello, user!\n");
+	term_writestr("Hello, user 0.01.1!");
+	term_nl();
+	term_writestr("I am printed on a new line!");
 }
