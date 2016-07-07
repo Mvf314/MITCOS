@@ -18,6 +18,13 @@ Then, you can run MITCOS with the following command:
 
 qemu-system-i386 -kernel MITCOS-x.y.bin
 
+### MITCOS Utils ###
+
+In the MITCOS repo is also a /util folder, containing utilities for compiling, linking, and building the kernel and OS.
+This was because I wanted to expand my knowledge with some shell scripting, but also because I couldn't be bothered to type the long commands for compiling and linking the files.
+
+Example: to run build.sh: sh utils/build.sh
+
 ## Naming ##
 
 MITCOS stands for "MITCOS Is The Coolest Operating System", but it can also stand for "Mvf314's Interesting but Terrible and Crappy Operating System".
