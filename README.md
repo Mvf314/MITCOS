@@ -23,7 +23,13 @@ qemu-system-i386 -kernel MITCOS-x.y.bin
 In the MITCOS repo is also a /util folder, containing utilities for compiling, linking, and building the kernel and OS.
 This was because I wanted to expand my knowledge with some shell scripting, but also because I couldn't be bothered to type the long commands for compiling and linking the files.
 
-Example: to run build.sh: sh utils/build.sh
+util/comp_kernel.sh compiles the C kernel.
+
+util/link_kernel.sh links the kernel with the boot assembly into the OS binary.
+
+util/build.sh compiles and linkd the kernel in one file.
+
+util/build_quick.sh is the same as util/build.sh, although build_quick doesn't ask for filenames, only for the OS version. build_quick is based on a file model where there are src, bin and bins folders.
 
 ## Naming ##
 
