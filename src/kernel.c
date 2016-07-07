@@ -19,7 +19,7 @@
 
 // This kernel will only work for i386 targets
 #if !defined(__i386__)
-#error "This kernel needs to be compiled with an ix89-elf compiler."
+#error "This kernel needs to be compiled with an ix86-elf compiler."
 #endif
 
 // Hardware VGA text mode color constants
@@ -69,6 +69,10 @@ size_t		term_column;
 uint8_t		term_col;
 uint16_t*	term_buf;
 
+size_t get_buffer_index(size_t x, size_t y) {
+        return (y * VGA_WIDTH) + x;
+}
+
 void term_init() {
 	term_row 	= 0;
 	term_column 	= 0;
@@ -76,8 +80,7 @@ void term_init() {
 	term_buf	= (uint16_t*) 0xB8000;				// VGA text buffer location
 	for (size_t y = 0; y < VGA_HEIGHT; y++) {
 		for (size_t x = 0; x < VGA_WIDTH; x++) {
-			const size_t index = y * VGA_WIDTH + x;
-			term_buf[index] = make_vga_entry(' ', term_col);
+			term_buf[get_buffer_index(x, y)] = make_vga_entry(' ', term_col);
 		}
 	}
 }
@@ -87,8 +90,7 @@ void term_setcolor(uint8_t col) {
 }
 
 void term_put_entry_at(char c, uint8_t col, size_t x, size_t y) {
-	const size_t index = y * VGA_WIDTH + x;
-	term_buf[index] = make_vga_entry(c, col);
+	term_buf[get_buffer_index(x, y)] = make_vga_entry(c, col);
 }
 
 void term_putchar(char c) {
@@ -96,7 +98,12 @@ void term_putchar(char c) {
 	if (++term_column == VGA_WIDTH) {
 		term_column = 0;
 		if (++term_row == VGA_HEIGHT) {
-			term_row = 0;
+			term_row = VGA_HEIGHT - 1;
+			for (size_t y = 0; y <= VGA_HEIGHT; y++) {
+				for (size_t x = 0; x < VGA_WIDTH; x++) {
+					term_buf[get_buffer_index(x, y - 1)] = term_buf[get_buffer_index(x, y)];
+				}
+			}
 		}
 	}
 }
@@ -110,11 +117,23 @@ void term_nl() {
 void term_writestr(const char* data) {
 	size_t data_len = strlen(data);
 	for (size_t i = 0; i < data_len; i++) {
+		// check for newlines
 		if (data[i] == '\n') {
 			term_nl();
 		} else {
 			term_putchar(data[i]);
 		}
+	}
+}
+
+void term_printstart() {
+	term_writestr("Welcome to the MITCOS 0.01.2 kernel by Mvf314.\n");
+}
+
+void fill_term() {
+	// Fill the terminal
+	for (size_t i = 0; i < 5000; i++) {
+		term_putchar((char) i);
 	}
 }
 
@@ -127,8 +146,7 @@ extern "C"
 void kernel_main() {
 	// Init terminal
 	term_init();
-	
-	// Print a string to the terminal
-	term_writestr("Hello, user 0.01.1!");
-	term_writestr("\nI am printed on a\nnew\nline!");
+	// Print a welcome message
+	term_printstart();
+	fill_term();
 }
