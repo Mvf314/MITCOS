@@ -101,15 +101,21 @@ void term_putchar(char c) {
 	}
 }
 
-void term_writestr(const char* data) {
-	size_t data_len = strlen(data);
-	for (size_t i = 0; i < data_len; i++)
-		term_putchar(data[i]);
+void term_nl() {
+        ++term_row;
+        term_column = 0;
 }
 
-void term_nl() {
-	++term_row;
-	term_column = 0;
+
+void term_writestr(const char* data) {
+	size_t data_len = strlen(data);
+	for (size_t i = 0; i < data_len; i++) {
+		if (data[i] == '\n') {
+			term_nl();
+		} else {
+			term_putchar(data[i]);
+		}
+	}
 }
 
 // Use C linkage for kernel_main
@@ -124,6 +130,5 @@ void kernel_main() {
 	
 	// Print a string to the terminal
 	term_writestr("Hello, user 0.01.1!");
-	term_nl();
-	term_writestr("I am printed on a new line!");
+	term_writestr("\nI am printed on a\nnew\nline!");
 }
