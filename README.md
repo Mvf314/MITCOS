@@ -36,3 +36,9 @@ util/build_quick.sh is the same as util/build.sh, although build_quick doesn't a
 ## Naming ##
 
 MITCOS stands for "MITCOS Is The Coolest Operating System", but it can also stand for "Mvf314's Interesting but Terrible and Crappy Operating System".
+
+## Changelog ##
+
+#### 0.01.2 ####
+
+\+ Added line scrolling
