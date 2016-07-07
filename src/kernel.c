@@ -137,6 +137,20 @@ void fill_term() {
 	}
 }
 
+void test_colors(int xStart, int yStart) {
+	term_column = xStart;
+	term_row = yStart;
+	term_writestr("Testing colors...");
+	for (size_t i = 0; i <= 15; i++) {
+		for (size_t j = 0; j <= 15; j++) {
+			term_put_entry_at('g', make_color(i, j), i + xStart + 1, j + yStart + 1);
+		}
+	}
+	term_column = xStart;
+	term_row = yStart + 17;
+	term_writestr("Done.");
+}
+
 // Use C linkage for kernel_main
 #if defined(__cplusplus)
 extern "C"
@@ -148,5 +162,5 @@ void kernel_main() {
 	term_init();
 	// Print a welcome message
 	term_printstart();
-	fill_term();
+	test_colors(0, 1);
 }
